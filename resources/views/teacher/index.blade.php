@@ -9,6 +9,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+
 </head>
 <body> 
  
@@ -99,7 +102,7 @@
                         data = data + "<td>"+value.institute+"</td>"
                         data = data + "<td>"
                             data = data + "<button type='button' class='btn btn-primary' onclick='editData("+value.id+")'>Edit</button>"
-                            data = data + "<button type='button' class='btn btn-danger'>Delete</button>"
+                            data = data + "<button type='button' class='btn btn-danger' onclick='deleteData("+value.id+")'>Delete</button>"
                         data = data + "</td>"
                     data = data + "</tr>"
                 })
@@ -130,7 +133,18 @@
             success: function(data){
                 clearData();
                 allData();
-                console.log('Successfully data added');
+                const msg = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                msg.fire({
+                    type: 'success',
+                    title: 'Data Added Succesfully',
+                })
             },
             error: function(error){
                 $('#nameError').text(error.responseJSON.errors.name);
@@ -175,13 +189,52 @@
                 $('#updateButton').hide();
                 clearData();
                 allData();
-                console.log('Successfully data added');
+                const msg = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                msg.fire({
+                    type: 'success',
+                    title: 'Data Updated Succesfully',
+                })
             },
             error: function(error){
                 $('#nameError').text(error.responseJSON.errors.name);
                 $('#titleError').text(error.responseJSON.errors.title);
                 $('#instituteError').text(error.responseJSON.errors.institute);
             } 
+        })
+    }
+
+    function deleteData(id){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "delete/"+id,
+            success: function(data){
+                $('#addHeader').show();
+                $('#updateHeader').hide();
+                $('#addButton').show();
+                $('#updateButton').hide();
+                clearData();
+                allData();
+                const msg = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                msg.fire({
+                    type: 'success',
+                    title: 'Data Deleted Succesfully',
+                })
+            }
         })
     }
 </script>

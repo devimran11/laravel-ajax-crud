@@ -49,4 +49,10 @@ class TeacherController extends Controller
         ]);
         return response()->json($data);
     }
+    public function delete($id)
+    {
+        $data = Teacher::find($id)->delete();
+        return response()->json($data);
+
+    }
 }

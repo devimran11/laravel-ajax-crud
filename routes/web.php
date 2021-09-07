@@ -22,3 +22,4 @@ Route::get('all-teacher', [TeacherController::class, 'allData'])->name('allData'
 Route::post('store', [TeacherController::class, 'store'])->name('store');
 Route::get('edit/{id}', [TeacherController::class, 'edit'])->name('edit');
 Route::post('update/{id}', [TeacherController::class, 'update'])->name('update');
+Route::get('delete/{id}', [TeacherController::class, 'delete'])->name('delete');
