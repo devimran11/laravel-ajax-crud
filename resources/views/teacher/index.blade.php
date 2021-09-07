@@ -47,7 +47,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <h3 id="addHeader">Add Data <span style="padding: right">Update Data</span> </h3>
+            <h3 id="addHeader">Add Data</h3>
+            <h3 id="updateHeader" style="padding: right">Update Data</h3> 
             <div class="card" style="mar">
                 <div style="margin: 7px">
                     <div class="form-group">
@@ -65,8 +66,9 @@
                           <input type="institute" class="form-control" placeholder="Enter Institute" id="institute" name="institute">
                           <span class="text-danger" id="instituteError"></span>
                         </div>
+                        <input type="hidden" name="id" id="id">
                       <button type="submit" id="addButton" name="submit" onclick="addData()" class="btn btn-primary">Submit</button>
-                      <button type="update" id="updateButton" name="update" class="btn btn-info">Update</button>
+                      <button type="update" id="updateButton" name="update" onclick="updateData()" class="btn btn-info">Update</button>
                 </div>
             </div>
         </div>
@@ -75,7 +77,7 @@
 <script>
     $('#addHeader').show();
     $('#updateHeader').hide();
-    $('#addButtion').show();
+    $('#addButton').show();
     $('#updateButton').hide();
     $.ajaxSetup({
         headers:{
@@ -143,10 +145,43 @@
             dataType: "json",
             url: "edit/"+id,
             success: function(data){
+                $('#addHeader').hide();
+                $('#addButton').hide();
+                $('#updateHeader').show();
+                $('#updateButton').show();
                 $('#name').val(data.name);
                 $('#title').val(data.title);
                 $('#institute').val(data.institute);
+                $('#id').val(data.id);
+
+                
             }
+        })
+    }
+    function updateData(){
+        var id = $('#id').val();
+        var name = $('#name').val();
+        var title = $('#title').val();
+        var institute = $('#institute').val();
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: {name:name, title:title, institute: institute},
+            url: "update/"+id,
+            success: function(data){
+                $('#addHeader').show();
+                $('#updateHeader').hide();
+                $('#addButton').show();
+                $('#updateButton').hide();
+                clearData();
+                allData();
+                console.log('Successfully data added');
+            },
+            error: function(error){
+                $('#nameError').text(error.responseJSON.errors.name);
+                $('#titleError').text(error.responseJSON.errors.title);
+                $('#instituteError').text(error.responseJSON.errors.institute);
+            } 
         })
     }
 </script>
